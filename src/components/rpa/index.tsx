@@ -14,6 +14,7 @@ import { Label } from "../ui/label";
 import _axios from "@/api/config";
 import LoginModal, { DialogDemo } from "./login";
 import moment from "moment";
+import { LoadingService } from "@/utils/LoadingService";
 type RpaProps = {};
 const danhSachCoDong: ColumnsType<DataType> = [
   {
@@ -21,31 +22,31 @@ const danhSachCoDong: ColumnsType<DataType> = [
     dataIndex: "stt",
     key: "stt",
     render: (text, record, index) => <a>{index + 1}</a>,
-    align: "center",
+    align: "left",
   },
   {
     title: "Tên",
     dataIndex: "name",
     key: "name",
-    align: "center",
+    align: "left",
   },
   {
     title: "CCCD/MST",
     dataIndex: "cardId",
     key: "cardId",
-    align: "center",
+    align: "left",
   },
   {
     title: "% Góp Vốn	",
     key: "sex",
     dataIndex: "sex",
-    align: "center",
+    align: "left",
   },
   {
     title: "Chức Vụ	",
     key: "birthday",
     dataIndex: "birthday",
-    align: "center",
+    align: "left",
   },
 ];
 const thayDoiGiayPhepDKKD: ColumnsType<DataType> = [
@@ -54,19 +55,19 @@ const thayDoiGiayPhepDKKD: ColumnsType<DataType> = [
     dataIndex: "stt",
     key: "stt",
     render: (text, record, index) => <a>{index + 1}</a>,
-    align: "center",
+    align: "left",
   },
   {
     title: "Thời Gian Thay Đổi",
     dataIndex: "ngayThayDoiTTGanNhat",
     key: "ngayThayDoiTTGanNhat",
-    align: "center",
+    align: "left",
   },
   {
     title: "Nội Dung Thay Đổi",
     dataIndex: "content",
     key: "content",
-    align: "center",
+    align: "left",
   },
 ];
 const danhSachNguoiLienQuan = [
@@ -75,31 +76,31 @@ const danhSachNguoiLienQuan = [
     dataIndex: "stt",
     key: "stt",
     render: (text, record, index) => <a>{index + 1}</a>,
-    align: "center",
+    align: "left",
   },
   {
     title: "Tên",
     dataIndex: "name",
     key: "name",
-    align: "center",
+    align: "left",
   },
   {
     title: "CCCD/MST",
     dataIndex: "cardId",
     key: "cardId",
-    align: "center",
+    align: "left",
   },
   {
     title: "% Góp Vốn	",
     key: "gopVon",
     dataIndex: "gopVon",
-    align: "center",
+    align: "left",
   },
   {
     title: "Chức Vụ	",
     key: "chucVu",
     dataIndex: "chucVu",
-    align: "center",
+    align: "left",
   },
 ];
 const danhSachCongTyLienQuan = [
@@ -111,7 +112,7 @@ const danhSachCongTyLienQuan = [
       console.log("1", index);
       return <a>{index + 1}</a>;
     },
-    align: "center",
+    align: "left",
   },
   {
     title: "Liên quan với	",
@@ -121,37 +122,37 @@ const danhSachCongTyLienQuan = [
     //   console.log('tesx',record)
     //   return<div>{record.thongTinChiTiet.daiDienPL}</div>
     // },
-    align: "center",
+    align: "left",
   },
   {
     title: "Tên Cty",
     dataIndex: "tenNNT",
     key: "tenNNT",
-    align: "center",
+    align: "left",
   },
   {
     title: "MST	",
     dataIndex: "mst",
     key: "mst",
-    align: "center",
+    align: "left",
   },
   {
     title: "% Góp Vốn",
     dataIndex: "gopVon",
     key: "gopVon",
-    align: "center",
+    align: "left",
   },
   {
     title: "Chức vụ",
     dataIndex: "chucVu",
     key: "chucVu",
-    align: "center",
+    align: "left",
   },
   {
     title: "Tình Trạng Hoạt Động",
     dataIndex: "ghiChu",
     key: "ghiChu",
-    align: "center",
+    align: "left",
   },
 ];
 const danhSachChiNhanh: ColumnsType<DataType> = [
@@ -160,25 +161,25 @@ const danhSachChiNhanh: ColumnsType<DataType> = [
     dataIndex: "stt",
     key: "stt",
     render: (text, record, index) => <a>{index + 1}</a>,
-    align: "center",
+    align: "left",
   },
   {
     title: "Tên CN",
     dataIndex: "tenNNT",
     key: "tenNNT",
-    align: "center",
+    align: "left",
   },
   {
     title: "MST",
     dataIndex: "mst",
     key: "mst",
-    align: "center",
+    align: "left",
   },
   {
     title: "Tình trạng hoạt động",
     key: "ghiChu",
     dataIndex: "ghiChu",
-    align: "center",
+    align: "left",
   },
 ];
 
@@ -218,7 +219,16 @@ const Rpa: React.FC<RpaProps> = () => {
     setDataDanhSachCongTyLienQuan(danhSachCongTyLienQuan);
   };
   console.log("hehe", dataDanhSachCongTyLienQuan);
+  const resetData=()=>{
+    setDataDanhSachChiNhanh([])
+    setDataDanhSachCoDong([])
+    setDataDanhSachCongTyLienQuan([])
+    setDataDanhSachNguoiLienQuan([])
+  }
   const traCuuNNT = async () => {
+    
+    LoadingService.start()
+    resetData()
     setIsLoading(true);
     try {
       const danhSachChiNhanh = await handleApiRequest(apiDanhSachChiNhanh, {
@@ -251,6 +261,7 @@ const Rpa: React.FC<RpaProps> = () => {
     } catch (error) {
       console.log(error);
       setIsLoading(false);
+      LoadingService.stop()
       if (error?.response?.status === 401) {
         setIsShowDialog(true);
       } else {
@@ -258,6 +269,8 @@ const Rpa: React.FC<RpaProps> = () => {
       }
     }
     setIsLoading(false);
+    LoadingService.stop()
+
   };
 
   // const traCuu = async () => {

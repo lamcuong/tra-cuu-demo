@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
 import { DialogDemo } from "../login";
+import { LoadingService } from "@/utils/LoadingService";
 
 type PhatNguoiProps = {};
 
@@ -39,7 +40,12 @@ const PhatNguoi: React.FC<PhatNguoiProps> = () => {
   const [jsxContent, setJsxContent] = useState(null);
   const [isLoading,setIsLoading] = useState(false)
   const regex = /(\d{2}[A-Za-z])/;
+  const resetData = ()=>{
+    setList([])
+  }
   const handleSubmit = async () => {
+    resetData()
+    LoadingService.start()
     setIsLoading(true)
     try {
       const list = bienSo.replaceAll(/\s+/g, "").split(/[,;]/);
@@ -53,13 +59,15 @@ const PhatNguoi: React.FC<PhatNguoiProps> = () => {
       renderResult(danhSachBien);
       setIsLoading(false)
     } catch (error) {
+      LoadingService.stop()
       if (error?.response?.status === 401) {
         setIsShowDialog(true);
       }
     }
+    LoadingService.stop()
+
   };
   const renderResult = (list) => {
-    console.log(123);
     setJsxContent(null);
     const startText = "KIỂM TRA PHẠT NGUỘI";
     const resultText = "Chúc mừng!";

@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import TableComponent from "../table";
 import _axios from "@/api/config";
 import { DialogDemo } from "../login";
+import { LoadingService } from "@/utils/LoadingService";
 
 type TaiSanProps = {};
 
@@ -40,11 +41,15 @@ const TaiSan: React.FC<TaiSanProps> = () => {
   };
   const apiTaiSan = "http://14.225.5.61/iEnterprise/oauth/enterprise/minvoice/getSecurityTransaction";
   const [value, setValue] = useState("");
-  const [data, setData] = useState([]);
   const [test, setTest] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isShowDialog, setIsShowDialog] = useState(false);
+  const resetData=()=>{
+    setTest([])
+  }
   const handleSubmit = async () => {
+    LoadingService.start()
+    resetData()
     setIsLoading(true);
     try {
       const data = await _axios.post(apiTaiSan, { taxCode: value });
@@ -52,10 +57,12 @@ const TaiSan: React.FC<TaiSanProps> = () => {
       testSample(data.data.data.split("\n"));
       setIsLoading(false);
     } catch (error) {
+      LoadingService.stop()
       if (error?.response?.status === 401) {
         setIsShowDialog(true);
       }
     }
+    LoadingService.stop()
   };
   return (
     <div className="mt-5 w-1/2 mx-auto">

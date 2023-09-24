@@ -8,6 +8,10 @@
   --primary-button: linear-gradient(90.67deg, #01ab6f 0.13%, #00b49e 95.62%);
   --primary-button-hover: linear-gradient(90.67deg, #00d289 0.13%, #00cdb4 95.62%);
   /* Handle on hover */
+  
+}
+html{
+  font-family: 'Times New Roman', Times, serif !important;
 }
 .card ::-webkit-scrollbar {
 }
@@ -22,4 +26,29 @@
 .card ::-webkit-scrollbar-thumb {
   background: #888;
   border-radius: 100px;
+}
+.app-loading-overlay{
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; 
+}
+.loading-spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3); 
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite; 
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
